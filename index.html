@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Nova Hub</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0B1220">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Nova Hub">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0B1220; --panel:#131B2E; --line:#232C41;
+    --gold:#C9A227; --ivory:#EDE9DD; --slate:#7C8296;
+    --safe:#7FD9A8; --warn:#E0A23A;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--navy);color:var(--ivory);font-family:'Inter',sans-serif;line-height:1.6;}
+  h1,h2,h3{font-family:'Space Grotesk',sans-serif;margin:0;font-weight:600;}
+  .wrap{max-width:480px;margin:0 auto;padding:0 20px 80px;}
+  a{color:var(--gold);}
+
+  .topnav{position:sticky;top:0;background:rgba(11,18,32,0.94);backdrop-filter:blur(6px);border-bottom:1px solid var(--line);z-index:10;padding:10px 0;}
+  .navscroll{display:flex;gap:6px;overflow-x:auto;padding:0 20px;scrollbar-width:none;}
+  .navscroll::-webkit-scrollbar{display:none;}
+  .navpill{flex:0 0 auto;background:none;border:1px solid var(--line);color:var(--slate);font-family:'Space Grotesk',sans-serif;font-size:12px;padding:6px 12px;border-radius:100px;white-space:nowrap;cursor:pointer;}
+  .navpill.active{border-color:var(--gold);color:var(--gold);}
+
+  .hero{text-align:center;padding:44px 0 28px;}
+  .mark{width:52px;height:52px;margin:0 auto 16px;border:1.5px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;}
+  .mark svg{width:28px;height:28px;}
+  .hero h1{font-size:26px;letter-spacing:0.5px;}
+  .hero .tagline{color:var(--gold);font-size:13px;margin-top:8px;font-weight:600;}
+
+  .finder-box{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;margin-top:22px;}
+  .finder-box label{display:block;font-size:11px;letter-spacing:1px;color:var(--slate);margin-bottom:8px;text-align:left;}
+  .finder-box input{width:100%;background:var(--navy);border:1px solid var(--line);color:var(--ivory);font-size:14px;padding:11px 12px;border-radius:8px;}
+  .finder-examples{font-size:11px;color:var(--slate);margin-top:10px;text-align:left;line-height:1.8;}
+  .finder-examples span{color:var(--gold);cursor:pointer;}
+
+  section{padding:30px 0;border-top:1px solid var(--line);}
+  .section-head{margin-bottom:16px;}
+  .section-head h2{font-size:18px;}
+  .section-head .sub{font-size:12px;color:var(--slate);margin-top:2px;}
+
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:10px;}
+  .card-title{font-size:14px;font-weight:600;}
+  .card-meta{font-size:11px;color:var(--gold);margin-top:2px;text-transform:uppercase;letter-spacing:0.5px;}
+  .card-desc{font-size:13px;color:var(--slate);margin-top:6px;}
+  .price{display:inline-block;margin-top:8px;font-size:12px;color:var(--gold);font-weight:600;}
+  .free-tag{display:inline-block;margin-top:8px;font-size:11px;color:var(--safe);font-weight:600;}
+  .card-link{display:inline-block;margin-top:10px;font-size:12px;font-weight:600;color:var(--gold);}
+
+  .chip-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
+  .chip{background:none;border:1px solid var(--line);color:var(--ivory);font-size:11px;padding:6px 11px;border-radius:100px;cursor:pointer;}
+  .chip.active{border-color:var(--gold);color:var(--gold);}
+
+  .lab{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px;}
+  .lab label{display:block;font-size:11px;letter-spacing:1px;color:var(--slate);margin:14px 0 6px;}
+  .lab label:first-child{margin-top:0;}
+  .lab input, .lab select, .lab textarea{width:100%;background:var(--navy);border:1px solid var(--line);color:var(--ivory);font-size:13px;padding:9px 10px;border-radius:8px;font-family:'Inter',sans-serif;}
+  .lab textarea{margin-top:10px;min-height:90px;resize:vertical;}
+  .lab-btn{width:100%;margin-top:16px;background:var(--gold);color:var(--navy);border:none;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:13px;padding:11px;border-radius:8px;cursor:pointer;}
+  .lab-output{margin-top:14px;background:var(--navy);border:1px solid var(--line);border-radius:8px;padding:12px;font-size:13px;display:none;}
+
+  .flag{display:flex;gap:8px;align-items:flex-start;padding:8px 0;border-top:1px solid var(--line);}
+  .flag:first-child{border-top:none;}
+  .flag-dot{width:6px;height:6px;border-radius:50%;background:var(--warn);margin-top:6px;flex:0 0 auto;}
+  .flag-text{font-size:12px;color:var(--ivory);}
+  .verdict{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:14px;margin-bottom:8px;}
+  .verdict.risky{color:var(--warn);}
+  .verdict.clear{color:var(--safe);}
+
+  .install-banner{margin-top:12px;padding:13px 14px;border:1px solid var(--line);border-radius:10px;background:var(--panel);display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;}
+  .install-banner strong{display:block;font-size:12px;}
+  .install-sub{font-size:11px;color:var(--slate);margin-top:2px;}
+  .install-banner button{flex:0 0 auto;border:1px solid var(--gold);background:none;color:var(--gold);border-radius:8px;padding:8px 14px;font-size:12px;font-weight:600;cursor:pointer;}
+
+  .social-links{display:flex;gap:14px;margin-top:14px;font-size:13px;}
+
+  .sf-block{margin-bottom:18px;}
+  .sf-label{display:block;font-size:11px;letter-spacing:1px;color:var(--slate);margin-bottom:8px;}
+  .sf-timer{text-align:center;font-family:'Space Grotesk',sans-serif;font-size:44px;font-weight:700;margin:14px 0;}
+  .sf-list{list-style:none;padding:0;margin:10px 0 0;}
+  .sf-list li{font-size:13px;padding:8px 0;border-top:1px solid var(--line);cursor:pointer;}
+  .sf-list li:first-child{border-top:none;}
+  .sf-list li.done{text-decoration:line-through;opacity:0.5;}
+  .sf-tip{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:12px;margin-bottom:18px;}
+  .sf-tip strong{color:var(--gold);}
+  .sf-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+  .sf-stats div{background:var(--navy);border-radius:8px;padding:10px 4px;text-align:center;}
+  .sf-stats strong{display:block;font-family:'Space Grotesk',sans-serif;font-size:18px;}
+  .sf-stats span{display:block;font-size:9px;color:var(--slate);margin-top:2px;}
+  .pro-tag{background:var(--gold);color:var(--navy);font-size:8px;font-weight:700;padding:1px 4px;border-radius:4px;margin-left:2px;}
+  .sf-pro-btn{position:relative;}
+  .nf-filter-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+  #miniTools textarea, #miniTools input{width:100%;background:var(--navy);border:1px solid var(--line);color:var(--ivory);font-size:13px;padding:9px 10px;border-radius:8px;font-family:'Inter',sans-serif;box-sizing:border-box;}
+  #miniTools textarea{min-height:80px;resize:vertical;}
+  footer{text-align:center;padding:32px 0 8px;font-size:11px;color:var(--slate);}
+  .empty{font-size:13px;color:var(--slate);padding:12px 0;}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="navscroll">
+    <button class="navpill active" data-target="home">Home</button>
+    <button class="navpill" data-target="solutions">Solutions</button>
+    <button class="navpill" data-target="finder">Nova Finder</button>
+    <button class="navpill" data-target="tools">Nova Tools</button>
+    <button class="navpill" data-target="guides">Nova Guides</button>
+    <button class="navpill" data-target="products">Digital Products</button>
+    <button class="navpill" data-target="downloads">My Downloads</button>
+    <button class="navpill" data-target="about">About</button>
+    <button class="navpill" data-target="contact">Contact</button>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <div id="home" class="hero">
+    <div class="mark">
+      <svg viewBox="0 0 24 24" fill="none">
+        <path d="M12 3 L14.5 12 L12 21 L9.5 12 Z" fill="#C9A227"/>
+        <path d="M3 12 L12 9.5 L21 12 L12 14.5 Z" fill="#C9A227" opacity="0.55"/>
+      </svg>
+    </div>
+    <h1>NOVA HUB</h1>
+    <div class="tagline">Got a problem? Nova has a solution.</div>
+
+    <div class="finder-box">
+      <label>What are you trying to do?</label>
+      <input type="text" id="homeSearch" placeholder="e.g. remove a photo background">
+      <div class="finder-examples">
+        Try: <span onclick="searchExample('remove a photo background')">remove a photo background</span> Â·
+        <span onclick="searchExample('edit a video')">edit a video</span> Â·
+        <span onclick="searchExample('study better')">study better</span>
+      </div>
+    </div>
+
+    <div class="install-banner" id="installBanner" style="display:none;">
+      <div>
+        <strong>Get Nova Hub as an app</strong>
+        <div class="install-sub">One tap, no app store needed.</div>
+      </div>
+      <button id="installPwaBtn">Install</button>
+    </div>
+  </div>
+
+  <section id="solutions">
+    <div class="section-head">
+      <h2>Popular Solutions</h2>
+    </div>
+    <div class="card">
+      <div class="card-title">ðŸŽ¯ Sprint Focus</div>
+      <div class="card-desc">Stay focused with timed work sprints.</div>
+      <a class="card-link" href="#tools" onclick="jump('tools');return false;">Open â†’</a>
+    </div>
+    <div class="card">
+      <div class="card-title">ðŸ§­ Nova Finder</div>
+      <div class="card-desc">Find the right tool for what you're trying to do.</div>
+      <a class="card-link" href="#finder" onclick="jump('finder');return false;">Open â†’</a>
+    </div>
+    <div class="card">
+      <div class="card-title">ðŸ›¡ï¸ Nova Safe</div>
+      <div class="card-desc">Learn to spot warning signs in suspicious messages.</div>
+      <a class="card-link" href="#tools" onclick="jump('tools');return false;">Open â†’</a>
+    </div>
+    <div class="card">
+      <div class="card-title">ðŸ“š Nova Guides</div>
+      <div class="card-desc">Simple, searchable explanations for confusing online tasks.</div>
+      <a class="card-link" href="#guides" onclick="jump('guides');return false;">Open â†’</a>
+    </div>
+  </section>
+
+  <section id="finder">
+    <div class="section-head">
+      <h2>ðŸ§­ Nova Finder</h2>
+      <div class="sub">Tell Nova what you need â€” it searches a curated list of tools.</div>
+    </div>
+    <div class="lab" style="margin-bottom:12px;">
+      <input type="text" id="finderSearch" placeholder="What are you trying to do?">
+    </div>
+    <div class="chip-row" id="finderCats"></div>
+
+    <div class="lab" style="margin-bottom:16px;">
+      <div class="section-head" style="margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;">
+        <h2 style="font-size:14px;">Narrow it down</h2>
+        <button class="copy-btn" onclick="resetFinderFilters()">Reset</button>
+      </div>
+      <div class="nf-filter-grid">
+        <select id="nfPrice">
+          <option value="all">Any price</option>
+          <option value="free">Free</option>
+          <option value="freemium">Freemium</option>
+        </select>
+        <select id="nfDevice">
+          <option value="all">Any device</option>
+          <option>Web</option>
+          <option>Android</option>
+          <option>iPhone</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="finderResults"></div>
+
+    <div class="lab" style="margin-top:16px;">
+      <div class="section-head" style="margin-bottom:6px;">
+        <h2 style="font-size:14px;">ðŸ§© Solve it without an app</h2>
+        <div class="sub">Sometimes you don't need another download.</div>
+      </div>
+      <div id="simpleSolutions"></div>
+    </div>
+
+    <div class="lab" style="margin-top:16px;">
+      <div class="section-head" style="margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;">
+        <h2 style="font-size:14px;">â¤ï¸ Saved Solutions</h2>
+        <button class="copy-btn" onclick="clearSavedTools()">Clear</button>
+      </div>
+      <div id="savedTools" class="empty" style="padding:4px 0;">Solutions you save will appear here.</div>
+    </div>
+
+    <div class="lab" style="margin-top:18px;">
+      <div class="section-head" style="margin-bottom:6px;">
+        <h2 style="font-size:14px;">ðŸ¤· Don't know what you need?</h2>
+        <div class="sub">Answer a couple of questions and Nova narrows it down.</div>
+      </div>
+      <label class="sf-label" style="margin-top:12px;">What are you trying to accomplish?</label>
+      <input id="wizardGoal" placeholder="e.g. create a professional poster">
+      <label class="sf-label">Do you need a free option?</label>
+      <select id="wizardPrice">
+        <option value="all">I'm open to either</option>
+        <option value="free">Yes, keep it free</option>
+      </select>
+      <button class="lab-btn" onclick="runWizard()">âœ¨ Find my solution</button>
+    </div>
+
+    <div class="lab" style="margin-top:16px;">
+      <div class="section-head" style="margin-bottom:6px;">
+        <h2 style="font-size:14px;">ðŸ•˜ Recent searches</h2>
+      </div>
+      <div id="novaHistory" class="empty" style="padding:4px 0;">Your recent searches will appear here.</div>
+    </div>
+  </section>
+
+  <section id="tools">
+    <div class="section-head">
+      <h2>ðŸš€ Nova Tools</h2>
+      <div class="sub">Original tools, built by Nova Hub.</div>
+    </div>
+
+    <div class="card" id="sprint-focus" style="padding:20px 16px;">
+      <div style="text-align:center;margin-bottom:16px;">
+        <div style="font-size:32px;">ðŸŽ¯</div>
+        <div style="color:var(--gold);font-size:10px;letter-spacing:2px;font-weight:700;margin-top:4px;">NOVA TOOL</div>
+        <h3 style="font-family:'Space Grotesk',sans-serif;font-size:20px;margin-top:4px;">Sprint Focus</h3>
+        <div style="color:var(--slate);font-size:12px;margin-top:2px;">Focus on one thing. One sprint at a time.</div>
+      </div>
+
+      <div class="sf-block">
+        <label class="sf-label">Today's goal</label>
+        <input id="sprintGoal" type="text" placeholder="What do you want to finish today?">
+      </div>
+
+      <div class="sf-block">
+        <label class="sf-label">Start a sprint</label>
+        <div class="chip-row">
+          <button class="chip sf-mode active" data-min="10" onclick="setSprintTime(this,10)">Quick Â· 10m</button>
+          <button class="chip sf-mode" data-min="25" onclick="setSprintTime(this,25)">Standard Â· 25m</button>
+          <button class="chip sf-mode sf-pro-btn" data-min="50" onclick="sfProGate(this,50)">Deep Â· 50m <span class="pro-tag">PRO</span></button>
+          <button class="chip sf-pro-btn" onclick="sfProGate(null,'custom')">Custom <span class="pro-tag">PRO</span></button>
+        </div>
+        <div class="sf-timer" id="sprintTimer">25:00</div>
+        <input id="sprintTask" type="text" placeholder="What are you working on?" style="margin-bottom:10px;">
+        <button class="lab-btn" onclick="startSprint()">â–¶ Start sprint</button>
+        <button class="lab-btn" style="background:none;border:1px solid var(--line);color:var(--ivory);margin-top:8px;" onclick="resetSprint()">â†» Reset</button>
+      </div>
+
+      <div class="sf-block">
+        <label class="sf-label">Mini task list</label>
+        <div style="display:flex;gap:8px;">
+          <input id="taskInput" type="text" placeholder="Add a task...">
+          <button class="copy-btn" style="flex:0 0 auto;" onclick="addSprintTask()">Add</button>
+        </div>
+        <ul id="sprintTasks" class="sf-list"></ul>
+      </div>
+
+      <div class="sf-block">
+        <label class="sf-label">Break</label>
+        <div class="sf-timer" id="breakTimer" style="font-size:32px;">05:00</div>
+        <div style="display:flex;gap:8px;">
+          <button class="chip" onclick="startBreak(5)">5 min break</button>
+          <button class="chip" onclick="startBreak(10)">10 min break</button>
+        </div>
+      </div>
+
+      <div class="sf-block">
+        <label class="sf-label">Distraction shield</label>
+        <div style="font-size:12px;color:var(--slate);margin-bottom:8px;">Write down something to check later instead of leaving your sprint.</div>
+        <div style="display:flex;gap:8px;">
+          <input id="distractionInput" type="text" placeholder="I'll check this later...">
+          <button class="copy-btn" style="flex:0 0 auto;" onclick="addDistraction()">Save</button>
+        </div>
+        <ul id="distractions" class="sf-list"></ul>
+      </div>
+
+      <div class="sf-tip">ðŸ’¡ <strong>Focus tip:</strong> <span id="focusTip">Start with the smallest part of the task.</span></div>
+
+      <div class="sf-block">
+        <label class="sf-label">Your focus stats</label>
+        <div class="sf-stats">
+          <div><strong id="minutesFocused">0</strong><span>Minutes</span></div>
+          <div><strong id="sprintsCompleted">0</strong><span>Sprints</span></div>
+          <div><strong id="tasksCompleted">0</strong><span>Tasks</span></div>
+          <div><strong id="focusStreak">0</strong><span>Streak</span></div>
+        </div>
+      </div>
+
+      <div class="lab" id="sfProBox" style="margin-top:14px;display:none;">
+        <div id="sfProText" style="font-size:13px;">Pay <b>UGX 3,000</b> to MTN MoMo <b>0769035715</b>.<br><button class="lab-btn" style="margin-top:8px;" onclick="sfShowSfCode()">I've Paid</button></div>
+        <div style="margin-top:10px;">
+          <input type="text" id="sfProCodeInput" placeholder="Enter Pro code" style="width:60%;display:inline-block;">
+          <button class="copy-btn" onclick="sfUnlockWithCode()">Unlock</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">ðŸ›¡ï¸ Nova Safe</div>
+      <div class="card-desc">Paste a suspicious message and see the warning signs, explained.</div>
+      <div class="lab" style="margin-top:12px;">
+        <textarea id="scamInput" placeholder="e.g. Congratulations! You've won 5,000,000 UGX. Click here to claim before it expires."></textarea>
+        <button class="lab-btn" onclick="checkScam()">Check message</button>
+        <div class="lab-output" id="scamOutput"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">ðŸ¤– Prompt Lab</div>
+      <div class="card-desc">Build a ready-to-use AI prompt in a few taps.</div>
+      <div class="lab" style="margin-top:12px;">
+        <div class="chip-row" id="labType">
+          <button class="chip active" data-val="Image">Image</button>
+          <button class="chip" data-val="Video">Video</button>
+          <button class="chip" data-val="Story">Story</button>
+          <button class="chip" data-val="Social post">Social Post</button>
+        </div>
+        <select id="labStyle">
+          <option>Everyday / relatable</option>
+          <option>Sci-fi / fantasy</option>
+          <option>Pop culture / trending</option>
+          <option>Comedy</option>
+        </select>
+        <input type="text" id="labTopic" placeholder="Topic, e.g. a roommate from another planet" style="margin-top:10px;">
+        <button class="lab-btn" onclick="generatePrompt()">Generate prompt</button>
+        <div class="lab-output" id="labOutput"></div>
+      </div>
+    </div>
+    <div class="card" style="padding:16px;">
+      <div class="card-title" style="margin-bottom:10px;">ðŸ§° Mini Tools</div>
+      <div id="miniTools"></div>
+    </div>
+
+  </section>
+
+  <section id="guides">
+    <div class="section-head">
+      <h2>ðŸ“š Nova Guides</h2>
+      <div class="sub">Simple explanations for confusing online tasks.</div>
+    </div>
+    <div class="lab" style="margin-bottom:16px;">
+      <input type="text" id="guideSearch" placeholder="What do you need a guide for?">
+    <
